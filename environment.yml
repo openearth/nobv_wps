@@ -1,0 +1,14 @@
+name: nobv_wps
+channels:
+  - conda-forge
+  - defaults
+dependencies:
+  - flask=3
+  - pandas=2
+  - pip=24.0
+  - python=3
+  - sqlalchemy=2
+  - pip:
+      - psycopg2-binary
+      - pywps
+
