@@ -32,6 +32,8 @@ import configparser
 import logging
 from sqlalchemy import create_engine, func, select
 
+logger = logging.getLogger("PYWPS")
+
 
 # Read default configuration from file
 def read_config(db):
@@ -55,10 +57,10 @@ def read_config(db):
         )
     if not os.path.exists(confpath):
         confpath = "/opt/pywps/processes/nobvgl_configuration.txt"
-    print("PG configpath", confpath)
-    # Parse and load
-    # logger.info('path to configuration',confpath)
+    # print("PG configpath", confpath)
+    logger.info("path to configuration", confpath)
 
+    # Parse and load
     cf = configparser.ConfigParser()
     cf.read(confpath)
     return cf
@@ -78,8 +80,8 @@ def createconnectiontopgdb():
     engine = create_engine(
         "postgresql+psycopg2://{u}:{p}@{h}:5432/{d}".format(u=user, p=pwd, h=host, d=db)
     )
-    # logger.info('engine to PG created')
-    print("PG connection established")
+    logger.info("engine to PG created")
+    # print("PG connection established")
     return engine
 
 
@@ -102,6 +104,7 @@ def getlocationsfromtableGL(prjnr):
         # result = c.callfunc("getLocations", str, [prjnr])
         # # logger.info('retrieved result from Oracle db for prjnr',str(prjnr))
         print("results", str(len(result)))
+        logger.info("number of results ", str(len(result)))
     return result
 
 
