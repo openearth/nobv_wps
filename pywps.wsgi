@@ -43,10 +43,12 @@ from pywps.app.Service import Service
 
 # Ultimate question
 from processes.ultimate_question import UltimateQuestion
+from processes.nobvgl_wps_gettimeseries import NOBVGLGetTimeseries
+from processes.nobvgl_wps_read_locations import NOBVGLReadlocations
 
 # TODO add the proces in the processes list
 processes = [
-    UltimateQuestion(),
+    UltimateQuestion(),NOBVGLGetTimeseries(),NOBVGLReadlocations()
 ]
 
 # Description used in template

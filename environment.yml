@@ -1,7 +1,6 @@
 name: nobv_wps
 channels:
   - conda-forge
-  - defaults
 dependencies:
   - flask=3
   - pandas=2
