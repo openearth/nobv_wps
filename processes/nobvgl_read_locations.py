@@ -108,7 +108,7 @@ def getlocationsfromtableGL(prjnr):
     return result
 
 
-def getlocationsfromtable(nobv=True, geolab=True, prjnr=None):
+def getlocationsfromtable():
     """Gets locations from two sources and combines them into 1 json
        This procedure replaces previous WPS in the end. (TODO)
     Args:
@@ -119,15 +119,16 @@ def getlocationsfromtable(nobv=True, geolab=True, prjnr=None):
     Returns:
         JSON : JSON with combined (if relevant) data
     """
-    result = None
-    res = None
-    result2 = getlocationsfromtableGL(prjnr)
-    rest = json.loads(result2)
-    return rest
+    lstprjnrs = (11206020, 11206021)
+    # empty dictionary
+    res = {}
+    for prjnr in lstprjnrs:
+        result2 = getlocationsfromtableGL(prjnr)
+        res.update(json.loads(result2))
+    return json.dumps(res)
 
 
 def test():
-    prjnr = 11206021
     md = list()
-    md = getlocationsfromtable(True, True, prjnr)
+    md = getlocationsfromtable()
     return md

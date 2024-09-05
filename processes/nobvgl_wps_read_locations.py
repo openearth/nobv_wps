@@ -43,13 +43,7 @@ from .nobvgl_read_locations import getlocationsfromtable
 
 class NOBVGLReadlocations(Process):
     def __init__(self):
-        inputs = [
-            ComplexInput(
-                "projectinfo",
-                "List of projectnumbers",
-                supported_formats=[Format("application/json")],
-            )
-        ]
+        inputs = []
         outputs = [
             ComplexOutput(
                 "jsonstations",
@@ -67,7 +61,7 @@ class NOBVGLReadlocations(Process):
              where timeseries information is avialable for each location.",
             profile="",
             metadata=[
-                Metadata("Monitoring Locations NOBV from Geolab Oracle database"),
+                Metadata("Monitoring Locations NOBV from Geolab Postgres database"),
                 Metadata("Returns GeoJSON with location information"),
             ],
             inputs=inputs,
@@ -78,12 +72,7 @@ class NOBVGLReadlocations(Process):
 
     def _handler(self, request, response):
         try:
-            locationinfo_str = request.inputs["projectinfo"][0].data
-            locationinfo_json = json.loads(locationinfo_str)
-
-            response.outputs["jsonstations"].data = getlocationsfromtable(
-                prjnr=locationinfo_json["projectnr"]
-            )
+            response.outputs["jsonstations"].data = getlocationsfromtable()
         except Exception as e:
             res = {"errMsg": "ERROR: {}".format(e)}
             response.outputs["output_json"].data = json.dumps(res)

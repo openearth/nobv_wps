@@ -90,6 +90,9 @@ def gettsfromtable(locid, parameter, projectnr):
         [projectnr, measid, param, datefrom, dateto],
     )
 
+    # TODO implement this 2024-09-04
+    # getTimeSeries(11206020, 3, 'regenval', '2024-03-01', '2025-01-01');
+
     # getts = c.callfunc('getTimeseries',str,[projectnr,1,locid])
     print("wtf is getts:", getts)
     result = ""  # todo, no idea what the format is
