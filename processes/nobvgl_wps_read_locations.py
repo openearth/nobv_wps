@@ -35,10 +35,10 @@ from .nobvgl_read_locations import getlocationsfromtable
 
 # http://localhost:5000/wps?service=wps&request=GetCapabilities&version=2.0.0
 # http://localhost:5000/wps?service=wps&request=DescribeProcess&version=2.0.0&Identifier=nobvgl_wps_read_locations
-# http://localhost:5000/wps?service=wps&request=Execute&version=2.0.0&Identifier=nobvgl_wps_read_locations&datainputs=projectinfo={"projectnr":11206021}
+# http://localhost:5000/wps?service=wps&request=Execute&version=2.0.0&Identifier=nobvgl_wps_read_locations
 # https://nobv.avi.directory.intra/wps?service=wps&request=GetCapabilities&version=2.0.0
 # https://nobv.openearth.nl/wps?service=WPS&request=DescribeProcess&version=2.0.0&Identifier=nobvgl_wps_read_locations
-# https://nobv.avi.directory.intra/wps?service=WPS&request=Execute&version=2.0.0&Identifier=nobvgl_wps_read_locations&datainputs=projectinfo={"projectnr":11206021}
+# https://nobv.avi.directory.intra/wps?service=WPS&request=Execute&version=2.0.0&Identifier=nobvgl_wps_read_locations
 
 
 class NOBVGLReadlocations(Process):

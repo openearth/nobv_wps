@@ -29,11 +29,17 @@
 import json
 import os
 import configparser
-from sqlalchemy import create_engine
+from sqlalchemy import create_engine, func, select
 
 
 # Read default configuration from file
 def read_config():
+    """reads configuration file with configparser
+       based on type of OS (NT is local, Linux is wps machine)
+
+    Returns:
+        Configparser object: configparser object with connection parameters
+    """
     # Default config file (relative path, does not work on production, weird)
     if os.name == "nt":
         devpath = r"C:\develop\nobv_wps\processes"
@@ -54,6 +60,11 @@ def read_config():
 
 
 def createconnectiontodb():
+    """create connection with PostgreSQL database
+
+    Returns:
+        sqlalchemy engine: SQLalchemy engine
+    """
     cf = read_config()
     user = cf.get("PostGIS", "user")
     pwd = cf.get("PostGIS", "pass")
@@ -65,107 +76,40 @@ def createconnectiontodb():
     return engine
 
 
-def gettsfromtable(locid, parameter, projectnr):
-    # haal voor deze loc_id de tijdreeksdata op.
-    # first create connection
-    print(locid, parameter)
-    print("-------------")
-    print(
-        "work in progress here, apparantly the getts is empty, not sure if the correct things are called."
-    )
-    print("-------------")
-    connection = createconnectiontodb()
-    c = connection.cursor()
-    # projectnr = 11206020
-    # getts = c.callfunc('getTimeseries',cx_Oracle.DB_TYPE_CLOB,[projectnr,1,locid])
-
-    # from august 2023 the parameters should be:
-    projectnr = 11206020
-    measid = 3
-    param = "regenval"
-    datefrom = "2023-01-29"
-    dateto = "2023-01-31"
-    getts = c.callfunc(
-        "getTimeseries",
-        [projectnr, measid, param, datefrom, dateto],
-    )
-
-    # TODO implement this 2024-09-04
-    # getTimeSeries(11206020, 3, 'regenval', '2024-03-01', '2025-01-01');
-
-    # getts = c.callfunc('getTimeseries',str,[projectnr,1,locid])
-    print("wtf is getts:", getts)
-    result = ""  # todo, no idea what the format is
-    return result
-    # selecting datetime / grondwaterstand / temperatuur
-    # return json.dumps(result)
-
-
-def gettsfromtable_ext(
-    measid, parameter, projectnr=None, datestart=None, dateend=None, instrnr=None
-):
-    """Extended timeseries retrievement from one of the databases that are supported.
-       It is assumed that if a projetnr is provided the Geolab database is the database that holds the timeseries data
-       this is an important switch
+def gettsfromtable(projectnr, measid, param, datefrom, dateto, instrumentnr=None):
+    """Call function gettimeseries in PostgreSQL database and return json with timeseries
 
     Args:
-        measid (string): string indicating what location data is requested for
-        parameter (string): parameter name
-        projectnr (string, optional): _description_. Defaults to None.
-        datestart (datetime, optional): ISO86001 date. Defaults to None.
-        dateend (datetime, optional): ISO86001 date. Defaults to None.
-        instrnr (string, optional): String indicating which instrumentnr or diver!. Defaults to None.
+        projectnr (integer): projectnr
+        measid (integer): the id of a location within the project
+        param (text): parameter description
+        datefrom (text): ISO8601 datetime YYYY-MM-DD
+        dateto (text): ISO8601 datetime YYYY-MM-DD
+        instrumentnr (integer): the number of the specific instrument (is not yet in the function!)
 
     Returns:
-        json: json with timeseries data
+        json: timeseries incl. metadata about the type of parameter
     """
-    # haal voor deze loc_id de tijdreeksdata op.
-    # first create connection
-    print(measid, parameter, projectnr, datestart, dateend, instrnr)
-    print("-------------")
-
-    connection = createconnectiontodb()
-    c = connection.cursor()
-
-    # from august 2023 the parameters should be:
-    # projectnr = 11206020
-    # datestart = '2023-01-29'
-    # dateend   = '2023-01-31'
-    getts = c.callfunc(
-        "getTimeseries",
-        [projectnr, measid, parameter, datestart, dateend],
-    )
-
-    # getts = c.callfunc('getTimeseries',str,[projectnr,1,locid])
-    if getts is None:
-        print("No results retreived")
-        return None
-    else:
-        result = ""  # TODO no idea what the object type is
-        return result
-    # selecting datetime / grondwaterstand / temperatuur
-    # return json.dumps(result)
+    engine = createconnectiontodb()
+    print(projectnr, measid, param, datefrom, dateto)
+    with engine.connect() as c:
+        query = select(func.gettimeseries(projectnr, measid, param, datefrom, dateto))
+        result = c.execute(query).fetchone()[0]
+    return json.dumps(result)
 
 
 def test():
     # no decision made yet to also pass parameter, for now the parameter name is couple to location id
-    dictp = {}
-    dictp["1"] = "Extensometer"
-    dictp["2"] = "Extensometer"
-    dictp["3"] = "Regenmeter"
-    dictp["4"] = "Regenmeter"
+    projectnr = 11206020
+    measid = 3
+    param = "regenval"
+    datefrom = "2024-01-29"
+    dateto = "2024-01-31"
 
-    lstlocs = ("Cabauw_1", "Cabauw_3", "Hazerwoude_2", "Hazerwoude_4")
-    for locid in lstlocs:
-        measid = locid.split("_")[1]
-        param = dictp[measid].lower()
-        res = gettsfromtable_ext(
-            int(measid),
-            param,
-            projectnr=None,
-            datestart=None,
-            dateend=None,
-            instrnr=None,
-        )
-        print("data for", locid)
-        print(res)
+    res = gettsfromtable(projectnr, measid, param, datefrom, dateto)
+
+    print(res)
+
+    for i in res:
+        for row in i:
+            print(row)
