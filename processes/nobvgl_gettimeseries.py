@@ -76,7 +76,7 @@ def createconnectiontodb():
     return engine
 
 
-def gettsfromtable(projectnr, measid, param, datefrom, dateto, instrumentnr=None):
+def gettsfromtable(measid, param, datefrom, dateto):
     """Call function gettimeseries in PostgreSQL database and return json with timeseries
 
     Args:
@@ -91,22 +91,21 @@ def gettsfromtable(projectnr, measid, param, datefrom, dateto, instrumentnr=None
         json: timeseries incl. metadata about the type of parameter
     """
     engine = createconnectiontodb()
-    print(projectnr, measid, param, datefrom, dateto)
+    print(measid, param, datefrom, dateto)
     with engine.connect() as c:
-        query = select(func.gettimeseries(projectnr, measid, param, datefrom, dateto))
+        query = select(func.gettimeseries(measid, param, datefrom, dateto))
         result = c.execute(query).fetchone()[0]
     return json.dumps(result)
 
 
 def test():
     # no decision made yet to also pass parameter, for now the parameter name is couple to location id
-    projectnr = 11206020
-    measid = 3
+    measid = 260462
     param = "regenval"
-    datefrom = "2024-01-29"
-    dateto = "2024-01-31"
+    datefrom = "2024-03-01"
+    dateto = "2024-03-31"
 
-    res = gettsfromtable(projectnr, measid, param, datefrom, dateto)
+    res = gettsfromtable(measid, param, datefrom, dateto)
 
     print(res)
 

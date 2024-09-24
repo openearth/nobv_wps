@@ -35,7 +35,8 @@ from .nobvgl_gettimeseries import gettsfromtable
 
 # http://localhost:5000/wps?service=wps&request=GetCapabilities&version=2.0.0
 # http://localhost:5000/wps?service=wps&request=DescribeProcess&version=2.0.0&Identifier=nobvgl_wps_gettimeseries
-# http://localhost:5000/wps?service=wps&request=Execute&version=2.0.0&Identifier=nobvgl_wps_gettimeseries&datainputs=locationinfo={"projectnr":11206020,"measid":3,"parameter":"regenval","datestart":"2024-01-29","dateend":"2025-01-31","instrnr":1}
+# http://localhost:5000/wps?service=wps&request=Execute&version=2.0.0&Identifier=nobvgl_wps_gettimeseries&datainputs=locationinfo={"measid":260462,"parameter":"regenval","datestart":"2024-03-01","dateend":"2024-03-31"}
+# https://nobv.openearth.nl/wps?service=wps&request=Execute&version=2.0.0&Identifier=nobvgl_wps_gettimeseries&datainputs=locationinfo={"measid":260462,"parameter":"regenval","datestart":"2024-03-01","dateend":"2024-03-31"}
 
 
 class NOBVGLGetTimeseries(Process):
@@ -79,19 +80,14 @@ class NOBVGLGetTimeseries(Process):
             locationinfo_json = json.loads(locationinfo_str)
 
             # split the stream in objects
-            projectnr = locationinfo_json["projectnr"]
             measid = locationinfo_json["measid"]
             parameter = locationinfo_json["parameter"]
             datestart = locationinfo_json["datestart"]
             dateend = locationinfo_json["dateend"]
-            instrnr = locationinfo_json["instrnr"]
 
             # for now it is not negioted how parameter and measid (Oracle DB is orderend by measid, not a parameter name!)
-            print("projectnr", projectnr)
 
-            res = gettsfromtable(
-                projectnr, measid, parameter, datestart, dateend, instrnr
-            )
+            res = gettsfromtable(measid, parameter, datestart, dateend)
             # res = gettsfromtable(locid, parameter,projectnr)
             # dit is de plek om een python script te gaan gebruiken die de tijdreeks voor je gaat ophalen.
             response.outputs["jsonstimeseries"].data = res

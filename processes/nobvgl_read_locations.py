@@ -119,13 +119,9 @@ def getlocationsfromtable():
     Returns:
         JSON : JSON with combined (if relevant) data
     """
-    lstprjnrs = (11206020, 11206021)
-    # empty dictionary
-    res = {}
-    for prjnr in lstprjnrs:
-        result2 = getlocationsfromtableGL(prjnr)
-        res.update(json.loads(result2))
-    return json.dumps(res)
+    lstprjnrs = "{11206020, 11206021}"
+    result = getlocationsfromtableGL(lstprjnrs)
+    return result
 
 
 def test():
