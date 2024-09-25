@@ -37,6 +37,7 @@ from .nobvgl_gettimeseries import gettsfromtable
 # http://localhost:5000/wps?service=wps&request=DescribeProcess&version=2.0.0&Identifier=nobvgl_wps_gettimeseries
 # http://localhost:5000/wps?service=wps&request=Execute&version=2.0.0&Identifier=nobvgl_wps_gettimeseries&datainputs=locationinfo={"measid":260462,"parameter":"regenval","datestart":"2024-03-01","dateend":"2024-03-31"}
 # https://nobv.openearth.nl/wps?service=wps&request=Execute&version=2.0.0&Identifier=nobvgl_wps_gettimeseries&datainputs=locationinfo={"measid":260462,"parameter":"regenval","datestart":"2024-03-01","dateend":"2024-03-31"}
+# https://nobv.openearth.nl/wps?service=wps&request=Execute&version=2.0.0&Identifier=nobvgl_wps_gettimeseries&datainputs=locationinfo={"measid":260526,"parameter":"zetting1","datestart":"2024-03-01","dateend":"2024-03-31"}
 
 
 class NOBVGLGetTimeseries(Process):
@@ -85,11 +86,10 @@ class NOBVGLGetTimeseries(Process):
             datestart = locationinfo_json["datestart"]
             dateend = locationinfo_json["dateend"]
 
-            # for now it is not negioted how parameter and measid (Oracle DB is orderend by measid, not a parameter name!)
-
+            # call the function that connects to PG, retrieves timeseries bases on the passed parameters
             res = gettsfromtable(measid, parameter, datestart, dateend)
-            # res = gettsfromtable(locid, parameter,projectnr)
-            # dit is de plek om een python script te gaan gebruiken die de tijdreeks voor je gaat ophalen.
+
+            # set the output response
             response.outputs["jsonstimeseries"].data = res
         except Exception as e:
             res = {"errMsg": "ERROR: {}".format(e)}
