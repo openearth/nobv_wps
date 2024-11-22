@@ -73,6 +73,7 @@ class NOBVGLReadlocations(Process):
     def _handler(self, request, response):
         try:
             # call getlocations and set the output response
+            print('wtf is going wrong')
             response.outputs["jsonstations"].data = getlocationsfromtable()
         except Exception as e:
             res = {"errMsg": "ERROR: {}".format(e)}

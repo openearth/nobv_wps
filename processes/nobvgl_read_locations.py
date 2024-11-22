@@ -107,6 +107,22 @@ def getlocationsfromtableGL(prjnr):
         logger.info("number of results ", str(len(result)))
     return result
 
+def getprojectnumbers():
+    """retrieve projecnumbers from file
+    """
+    if os.name == 'nt':
+        fn = r'C:\develop\nobv_wps\processes\projectnrs.txt'
+    else:
+        fn = r"/opt/pywps/processes/projectnrs.txt"
+
+    with open(fn) as f:
+        lines = f.readlines()
+
+    lstprj = ''
+    for l in lines:
+        lstprj = ','.join([str(l.replace('\n', '')),lstprj])
+
+    return lstprj[:-1]
 
 def getlocationsfromtable():
     """Gets locations from two sources and combines them into 1 json
@@ -119,7 +135,10 @@ def getlocationsfromtable():
     Returns:
         JSON : JSON with combined (if relevant) data
     """
-    lstprjnrs = "{11206020, 11206021}"
+
+    lstprj = getprojectnumbers()
+    lstprjnrs = "{"+lstprj+"}"
+    #lstprjnrs = "{11206020, 11206021, 11204108, 11206457}"
     result = getlocationsfromtableGL(lstprjnrs)
     return result
 

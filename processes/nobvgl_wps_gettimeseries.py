@@ -35,8 +35,8 @@ from .nobvgl_gettimeseries import gettsfromtable
 
 # http://localhost:5000/wps?service=wps&request=GetCapabilities&version=2.0.0
 # http://localhost:5000/wps?service=wps&request=DescribeProcess&version=2.0.0&Identifier=nobvgl_wps_gettimeseries
-# http://localhost:5000/wps?service=wps&request=Execute&version=2.0.0&Identifier=nobvgl_wps_gettimeseries&datainputs=locationinfo={"measid":260462,"parameter":"regenval","datestart":"2024-03-01","dateend":"2024-03-31"}
-# https://nobv.openearth.nl/wps?service=wps&request=Execute&version=2.0.0&Identifier=nobvgl_wps_gettimeseries&datainputs=locationinfo={"measid":260462,"parameter":"regenval","datestart":"2024-03-01","dateend":"2024-03-31"}
+# http://localhost:5000/wps?service=wps&request=Execute&version=2.0.0&Identifier=nobvgl_wps_gettimeseries&datainputs=locationinfo={"measid":285099,"parameter":"regenval","datestart":"2024-03-01","dateend":"2024-12-31"}
+# https://nobv.openearth.nl/wps?service=wps&request=Execute&version=2.0.0&Identifier=nobvgl_wps_gettimeseries&datainputs=locationinfo={"measid":285099,"parameter":"regenval","datestart":"2024-03-01","dateend":"2024-12-31"}
 # https://nobv.openearth.nl/wps?service=wps&request=Execute&version=2.0.0&Identifier=nobvgl_wps_gettimeseries&datainputs=locationinfo={"measid":260526,"parameter":"zetting1","datestart":"2024-03-01","dateend":"2024-03-31"}
 
 
